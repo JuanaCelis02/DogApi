@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             if(call.isSuccessful){
                 //Show recyclerview
             }else{
-                //Show error
+                //Show errorr
             }
         }
     }
