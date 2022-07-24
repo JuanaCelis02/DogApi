@@ -10,7 +10,10 @@ import retrofit2.http.Url
 
 interface IApiService {
 
+    /**
+     * Las funciones asincronas llevan un suspend antes del fun
+     */
     @GET
-    fun getDogsByBreeds(@Url url:String):Response<DogsResponse>
+    suspend fun getDogsByBreeds(@Url url:String):Response<DogsResponse>
 
 }

@@ -2,7 +2,10 @@ package com.example.dogapi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dogapi.databinding.ActivityMainBinding
@@ -13,7 +16,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: DogAdapter
@@ -23,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.svDogs.setOnQueryTextListener(this)
         initRecyclerView()
     }
 
@@ -62,13 +66,36 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     showError()
                 }
+                hideKeyBoard() //Ocultara el teclado cuando le demos buscar
             }
 
         }
     }
 
+    private fun hideKeyBoard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.viewRoot.windowToken, 0)
+    }
+
     private fun showError() {
         Toast.makeText(this,"Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * Cuando termine de buscar y le de en buscar llamara este metodo
+     */
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if(!query.isNullOrBlank()){
+            searchByName(query.lowercase())
+        }
+        return true
+    }
+
+    /**
+     * Nos van a avisar cuando el usuario escriba algo en la barra de texto
+     */
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return true
     }
 
 }
